@@ -3,8 +3,8 @@
 - A full stack ToDo List app built with MERN stack deployed on Render and Vercel.
 
 ## Live Demo
-- 🔗 Frontend: [https://your-frontend.vercel.app](https://your-frontend.vercel.app)
-- 🔗 Backend: [https://your-backend.onrender.com](https://your-backend.onrender.com)
+- 🔗 Frontend: [https://mern-todolist-seven.vercel.app](https://mern-todolist-seven.vercel.app)
+- 🔗 Backend: [https://mern-backend-todolist.onrender.com/todos](https://mern-backend-todolist.onrender.com/todos)
 
 ## Features
 - Add, update, delete todos
