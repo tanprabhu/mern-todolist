@@ -9,7 +9,8 @@ app.use(cors({
   origin: [
     'http://localhost:5173',                    // local Vite dev server
     'https://mern-todolist-seven.vercel.app'    // deployed frontend
-  ]
+  ],
+  methods:['GET', 'POST', 'PUT', 'DELETE']
 }));
 app.use(express.json());
 
