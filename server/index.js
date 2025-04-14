@@ -6,7 +6,7 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 
 app.use(cors({
-  origin: 'http://localhost:5173'
+  origin: 'https://mern-todolist-seven.vercel.app/'
 }));
 app.use(express.json());
 
