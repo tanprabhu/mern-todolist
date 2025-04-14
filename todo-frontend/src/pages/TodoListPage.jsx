@@ -3,8 +3,6 @@ import { getTodos, addTodo, updateTodos, deleteTodos } from '../services/todoSer
 import ToDoItem from '../components/ToDoItem';
 import './TodoListPage.css';
 
-const API_BASE = import.meta.env.VITE_API_BASE;
-
 const ToDoListPage = () => {
   const [todos, setTodos] = useState([]);
   const [newTodo, setNewTodo] = useState('');
