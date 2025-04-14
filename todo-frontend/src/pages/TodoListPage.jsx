@@ -8,8 +8,20 @@ const ToDoListPage = () => {
   const [newTodo, setNewTodo] = useState('');
 
   useEffect(() => {
-    getTodos().then(res => setTodos(res.data));
-
+    getTodos()
+      .then(res => {
+        const data = res?.data || res;
+        if (Array.isArray(data)) {
+          setTodos(data);
+        } else {
+          console.warn('Unexpected API response:', data);
+          setTodos([]); // fallback to prevent crash
+        }
+      })
+      .catch(err => {
+        console.error('Error fetching todos:', err);
+        setTodos([]); // fallback
+      });
   }, []);
 
   const handleAdd = () => {
@@ -50,13 +62,18 @@ const ToDoListPage = () => {
           <button onClick={handleAdd}>Add</button>
         </div>
 
-        {todos.map(todo => (
-          <ToDoItem
-            key={todo._id}
-            todo={todo}
-            onUpdate={handleUpdate}
-            onDelete={handleDelete} />
-        ))}
+        {Array.isArray(todos) ? (
+          todos.map(todo => (
+            <ToDoItem
+              key={todo._id}
+              todo={todo}
+              onUpdate={handleUpdate}
+              onDelete={handleDelete}
+            />
+          ))
+        ) : (
+          <p style={{ textAlign: 'center' }}>⚠️ Could not load todos.</p>
+        )}
       </div>
     </div>
   );
