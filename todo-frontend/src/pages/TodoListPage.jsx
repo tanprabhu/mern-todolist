@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { getTodos, addTodo, updateTodos, deleteTodos } from '../services/todoService';
-import ToDoItem from '../components/TodoItem';
+import ToDoItem from '../components/ToDoItem';
 import './TodoListPage.css';
 
 const ToDoListPage = () => {
