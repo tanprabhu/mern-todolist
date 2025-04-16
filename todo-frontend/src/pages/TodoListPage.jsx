@@ -6,6 +6,12 @@ import './TodoListPage.css';
 const ToDoListPage = () => {
   const [todos, setTodos] = useState([]);
   const [newTodo, setNewTodo] = useState('');
+  const [error, setError] = useState('');    
+  const showError = (msg) => {
+    setError(msg);
+    setTimeout(() => setError(''), 3000); // Auto-clear after 3s
+  };
+  
 
   useEffect(() => {
     getTodos()
@@ -25,14 +31,51 @@ const ToDoListPage = () => {
   }, []);
 
   const handleAdd = () => {
-    addTodo({ title: newTodo, completed: false })
+    const trimmed = newTodo.trim();
+    if(trimmed === ''){
+      showError('Todo cannot be empty');
+      return;
+    }
+
+    const isDuplicate = todos.some(todo => todo.title.toLowerCase() === trimmed.toLowerCase());
+
+    if(isDuplicate){
+      showError("Duplicate item already exists!");
+      return;
+    }
+
+    addTodo({ title: trimmed, completed: false })
       .then(res => {
         setTodos(prev => [...prev, res.data]);
         setNewTodo('');
+      })
+      .catch(() => {
+        showError('Failed to add item.');
       });
   };
 
   const handleUpdate = (id, updates) => {
+    const trimmedTitle = updates.title?.trim();
+    if(trimmedTitle){
+      const duplicate = todos.find(
+        todo => todo.title.toLowerCase() === trimmedTitle.toLowerCase() && todo._id!== id
+      );
+      if(duplicate){
+        deleteTodos(id)
+        .then(() => {
+          setTodos(prev => prev.filter(t => t._id !== id));
+          showError(`Merged with existing item: "${duplicate.title}"`);
+        })
+        .catch(
+          err=>{
+            console.error("Merge failed", err);
+            showError("Error merging todos");
+          }
+        );
+        return;
+      }
+    }
+
 
     updateTodos(id, updates)
       .then(res => {
@@ -41,6 +84,7 @@ const ToDoListPage = () => {
       })
       .catch(err => {
         console.error("Update failed", err);
+        showError("Failed to update todo.");
       });
   };
 
@@ -52,7 +96,7 @@ const ToDoListPage = () => {
 
   return (
     <div className="todo-container">
-      <h1>My Todo list</h1>
+      <h1>My To-Do list</h1>
       <div className='items'>
         <div className="todo-input-group">
           <input value={newTodo}
@@ -61,6 +105,8 @@ const ToDoListPage = () => {
           />
           <button onClick={handleAdd}>Add</button>
         </div>
+
+        {error && <p className="error-message">{error}</p>}
 
         {Array.isArray(todos) ? (
           todos.map(todo => (
